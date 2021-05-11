@@ -1,13 +1,14 @@
-package factory.impl;
+package factory.model;
 
-import factory.IFlower;
+import factory.FlowerFactory;
+
 
 /**
  * @author maybelence
  * @descrpition
  * @date 2021-05-07
  */
-public class Rose implements IFlower {
+public class Rose implements FlowerFactory.IFlower {
     @Override
     public String getColor() {
         return  "ÎÒÊÇÀ¶É«Ñý¼§";

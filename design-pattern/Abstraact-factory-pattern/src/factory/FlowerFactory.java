@@ -1,8 +1,8 @@
 package factory;
 
-import factory.impl.Lily;
-import factory.impl.Rose;
-import factory.impl.Tulip;
+import factory.model.Lily;
+import factory.model.Rose;
+import factory.model.Tulip;
 
 /**
  * @author maybelence
@@ -12,7 +12,7 @@ import factory.impl.Tulip;
 public class FlowerFactory extends AbstractFactory{
 
     @Override
-    public IFlower getFlower(Enum<FlowerEnum>  productEnum) {
+    public FlowerFactory.IFlower getFlower(Enum<FlowerEnum>  productEnum) {
         if (FlowerEnum.ROSE == productEnum) return new Rose();
         if (FlowerEnum.LILY == productEnum) return new Lily();
         if (FlowerEnum.TULIP == productEnum) return new Tulip();
@@ -20,8 +20,8 @@ public class FlowerFactory extends AbstractFactory{
     }
 
     @Override
-    public IMelon getMelon(Enum<MelonEnum>  productEnum) {
-        return null;
+    public MelonFactory.IMelon getMelon(Enum<MelonEnum>  productEnum) {
+        throw new IllegalArgumentException("无法通过本工厂获取该类型对象");
     }
 }
 

@@ -1,18 +1,14 @@
 import factory.AbstractFactory;
-import factory.FlowerEnum;
-import factory.IFlower;
-import factory.IMelon;
-import factory.MelonEnum;
+import factory.FlowerFactory;
+import factory.MelonFactory;
 import org.junit.Assert;
 import org.junit.Test;
-
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
+
 
 /**
  * @author maybelence
@@ -22,34 +18,37 @@ import java.util.stream.Collectors;
 public class TestSimpleFactory {
 
     @Test
-    public void testFactory() {
+    public void testSimpleFactory() {
         // 1. 鼠标
-        IProduct mouseProduct = ProductFactory.createProduct(ProductEnum.MOUSE);
+        ProductFactory.IProduct mouseProduct = ProductFactory.createProduct(ProductFactory.ProductEnum.MOUSE);
         Assert.assertEquals("我是鼠标", mouseProduct.printMessage());
         // 2. 键盘
-        IProduct keyboardProduct = ProductFactory.createProduct(ProductEnum.KEYBOARD);
+        ProductFactory.IProduct keyboardProduct = ProductFactory.createProduct(ProductFactory.ProductEnum.KEYBOARD);
         Assert.assertEquals("我是键盘", keyboardProduct.printMessage());
         // 3. 电脑
-        IProduct pcProduct = ProductFactory.createProduct(ProductEnum.PC);
+        ProductFactory.IProduct pcProduct = ProductFactory.createProduct(ProductFactory.ProductEnum.PC);
         Assert.assertEquals("我是电脑", pcProduct.printMessage());
     }
 
 
     @Test
     public void testAbstractFactory() {
-        // 获取鲜花工厂
+        // 通过生成器获取鲜花工厂
         AbstractFactory flowerFactory = FactoryProducer.getFactory(FactoryEnum.FLOWER);
         // 构造蓝色妖姬
-        IFlower flower = flowerFactory.getFlower(FlowerEnum.ROSE);
+        AbstractFactory.IFlower flower = flowerFactory.getFlower(FlowerFactory.FlowerEnum.ROSE);
         Assert.assertEquals("我是蓝色妖姬", flower.getColor());
-        // 获取瓜工厂
+        // 通过生成器获取瓜工厂
         AbstractFactory melonFactory = FactoryProducer.getFactory(FactoryEnum.MELON);
         //构造西瓜
-        IMelon melon = melonFactory.getMelon(MelonEnum.WATER);
+        AbstractFactory.IMelon melon = melonFactory.getMelon(MelonFactory.MelonEnum.WATER);
         Assert.assertEquals("我是西瓜", melon.getVariety());
     }
 
-
+    /**
+     * 测试反射破坏单例
+     * @throws Exception
+     */
     @Test
     public void testReflectDestoryInstance() throws Exception {
         // 获取类的显式构造器
@@ -65,19 +64,21 @@ public class TestSimpleFactory {
     }
 
 
+    
+
+
+    /**
+     * 测试懒汉的线程安全问题
+     */
     @Test
-    public void testHungryThreadDanger(){
+    public void testLazyThread(){
 
         ExecutorService threadpool = Executors.newFixedThreadPool(50);
         List<Integer> list = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            threadpool.execute(new Runnable() {
-                public void run() {
-                    list.add(LazySingleTon.getInstance().hashCode());
-                }
-            });
+            threadpool.execute(() -> list.add(LazySingleTon.getInstance().hashCode()));
         }
-        //如果不止有一个hashcode 说明线程不安全 （多试几次）
+        //如果不止有一个hashcode 说明线程不安全
         Assert.assertNotEquals(1, list.stream().distinct().count());
     }
 

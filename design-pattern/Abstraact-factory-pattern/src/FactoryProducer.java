@@ -4,7 +4,7 @@ import factory.MelonFactory;
 
 /**
  * @author maybelence
- * @descrpition
+ * @descrpition 获取具体工厂类
  * @date 2021-05-07
  */
 public class FactoryProducer {
