@@ -3,6 +3,7 @@ import factory.FlowerFactory;
 import factory.MelonFactory;
 import org.junit.Assert;
 import org.junit.Test;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class TestSimpleFactory {
 
     /**
      * 测试反射破坏单例
+     *
      * @throws Exception
      */
     @Test
@@ -64,14 +66,11 @@ public class TestSimpleFactory {
     }
 
 
-    
-
-
     /**
      * 测试懒汉的线程安全问题
      */
     @Test
-    public void testLazyThread(){
+    public void testLazyThread() {
 
         ExecutorService threadpool = Executors.newFixedThreadPool(50);
         List<Integer> list = new ArrayList<>();
@@ -80,6 +79,21 @@ public class TestSimpleFactory {
         }
         //如果不止有一个hashcode 说明线程不安全
         Assert.assertNotEquals(1, list.stream().distinct().count());
+    }
+
+
+    /**
+     * 测试建造者
+     */
+    @Test
+    public void testBuilder() {
+        Director director = new Director();
+        EcoTank levelOne = director.levelOne();
+        System.out.println("低配缸：" + levelOne);
+
+        EcoTank levelTwo = director.levelTwo();
+        System.out.println("高配缸：" + levelTwo);
+
     }
 
 }
