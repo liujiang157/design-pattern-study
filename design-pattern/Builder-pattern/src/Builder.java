@@ -11,7 +11,7 @@ public abstract class Builder {
 
     abstract Builder buildFilter(Filter filter); // ¹ıÂË
 
-    abstract Builder buildFish(Fish fish); // Ğ¡Óã
+    abstract Builder buildFish(Fish fish); // Óã
 
     abstract Builder buildLand(Land land); // Ôì¾°
 

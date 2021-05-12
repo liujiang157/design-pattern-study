@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -95,5 +96,18 @@ public class TestSimpleFactory {
         System.out.println("高配缸：" + levelTwo);
 
     }
+
+
+    @Test
+    public void testPrototype() {
+        ReportTemplate.loadTemplate();
+        Report report = ReportTemplate.getTemplate(Report.ReportType.WEEK);
+        //修改周报时间为本周
+        report.setTime(new Date());
+        //敷衍的上传报告
+        report.printReport();
+    }
+
+
 
 }
